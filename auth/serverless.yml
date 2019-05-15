@@ -94,8 +94,13 @@ functions:
 #      variable2: value2
 
 # you can add CloudFormation resource templates here
-#resources:
-#  Resources:
+resources:
+  Resources:
+    DatabaseVPC:
+      Type: AWS::EC2::VPC
+      Properties:
+        CidrBlock: 172.30.0.0/16
+        InstanceTenancy: default
 #    NewResource:
 #      Type: AWS::S3::Bucket
 #      Properties:
