@@ -19,6 +19,11 @@ serverless deploy --verbose --aws-profile <profile_name>
 serverless invoke -f hello --aws-profile <profile_name>
 ```
 
+## Removing
+```
+serverless remove --aws-profile <profile_name>
+```
+
 ## Thoughts
 
 I need a database. AWS Aurora Serverless seems like it does Postgres (what I want).
