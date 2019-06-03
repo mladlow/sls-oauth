@@ -58,7 +58,6 @@ functions:
         - Ref: DatabaseVPCSecurityGroup1
       subnetIds:
         - Ref: DatabaseVPCSubnetId1
-        - Ref: DatabaseVPCSubnetId2
     events:
       - http:
           path: hello
@@ -91,3 +90,23 @@ resources:
         CidrBlock: 172.30.20.0/24
         VpcId:
           Ref: DatabaseVPC
+    AuroraClusterParameterGroup:
+      Type: AWS::RDS::DBClusterParameterGroup
+      Properties:
+        Description: "Parameters for AuroraDatabase"
+        Family: "aurora-postgresql10"
+        Parameters:
+          rds.force_ssl: 1
+    AuroraDatabase:
+      Type: AWS::RDS::DBCluster
+      Properties:
+        DBClusterIdentifier: "sls-oauth-aurora"
+        DBClusterParameterGroupName:
+          Ref: AuroraClusterParameterGroup
+        DBSubnetGroupName:
+          Ref: DatabaseVPCSubnetId2
+        DatabaseName: "sls-oauth"
+        Engine: "aurora-postgresql"
+        EngineVersion: "10.5"
+        VpcSecurityGroupIds:
+          - Ref: DatabaseVPCSecurityGroup1
