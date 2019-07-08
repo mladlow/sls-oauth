@@ -34,6 +34,14 @@ I can (probably) use Flyway for migrations (https://flywaydb.org/), though this 
 
 At this point, although it seems like overkill, probably should consider something like AWS CodeDeploy.
 
+### 7/8/2019
+
+Pivoted to DynamoDB. Will research how to actually structure data this way, but would prefer to hone Go and actual oauth skills, not AWS knowledge specifically.
+
+Inserted an item into a DynamoDB table. Finally got permissions working and everything. Need to investigate variable storage and code refactoring.
+
+Configured DynamoDB table using the AWS Console. Don't really want it linked to deploy & remove of my lambda functions anyway.
+
 ## Useful Links
 
 * CloudFormation template basics (serverless.yml uses this) - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/gettingstarted.templatebasics.html

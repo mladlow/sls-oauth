@@ -24,6 +24,17 @@ provider:
   stage: dev
   region: us-east-1
 
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/sls-oauth"
+#      Resource:
+#        Fn::Join:
+#          - ""
+#          - - "arn:aws:dynamodb:${}::"
+#            - "table/sls-oauth"
+
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
 #    - Effect: "Allow"
@@ -53,60 +64,3 @@ package:
 functions:
   hello:
     handler: bin/hello
-    vpc:
-      securityGroupIds:
-        - Ref: DatabaseVPCSecurityGroup1
-      subnetIds:
-        - Ref: DatabaseVPCSubnetId1
-    events:
-      - http:
-          path: hello
-          method: get
-
-resources:
-  Resources:
-    DatabaseVPC:
-      Type: AWS::EC2::VPC
-      Properties:
-        CidrBlock: 172.30.0.0/16
-        InstanceTenancy: default
-    DatabaseVPCSecurityGroup1:
-      Type: AWS::EC2::SecurityGroup
-      Properties:
-        GroupDescription: "First group for accessing VPC"
-        VpcId:
-          Ref: DatabaseVPC
-    DatabaseVPCSubnetId1:
-      Type: AWS::EC2::Subnet
-      Properties:
-        AvailabilityZone: ${self:provider.region}a
-        CidrBlock: 172.30.10.0/24
-        VpcId:
-          Ref: DatabaseVPC
-    DatabaseVPCSubnetId2:
-      Type: AWS::EC2::Subnet
-      Properties:
-        AvailabilityZone: ${self:provider.region}b
-        CidrBlock: 172.30.20.0/24
-        VpcId:
-          Ref: DatabaseVPC
-    AuroraClusterParameterGroup:
-      Type: AWS::RDS::DBClusterParameterGroup
-      Properties:
-        Description: "Parameters for AuroraDatabase"
-        Family: "aurora-postgresql10"
-        Parameters:
-          rds.force_ssl: 1
-    AuroraDatabase:
-      Type: AWS::RDS::DBCluster
-      Properties:
-        DBClusterIdentifier: "sls-oauth-aurora"
-        DBClusterParameterGroupName:
-          Ref: AuroraClusterParameterGroup
-        DBSubnetGroupName:
-          Ref: DatabaseVPCSubnetId2
-        DatabaseName: "sls-oauth"
-        Engine: "aurora-postgresql"
-        EngineVersion: "10.5"
-        VpcSecurityGroupIds:
-          - Ref: DatabaseVPCSecurityGroup1
